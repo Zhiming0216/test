@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Control V2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <div class="bg-dark text-white" id="sidebar-wrapper">
+        <div class="sidebar-heading text-center py-4 fs-4 fw-bold border-bottom">🤖 控制终端</div>
+        <div class="list-group list-group-flush my-3">
+            <button class="list-group-item list-group-item-action bg-dark text-white active" onclick="showPage('connect')" id="nav-connect">🔌 设备连接</button>
+            <button class="list-group-item list-group-item-action bg-dark text-white disabled" onclick="showPage('basic')" id="nav-basic">🎮 基本控制</button>
+        </div>
+        <div class="mt-auto p-3 text-center small text-white-50"><div id="status-text">未连接</div></div>
+    </div>
+
+    <div id="page-content-wrapper" class="w-100 bg-light">
+        <div class="container-fluid p-4">
+            
+            <div id="page-connect" class="content-section">
+                <h3 class="mb-4">设备连接配置</h3>
+                
+                <div class="card shadow-sm" style="max-width: 600px;">
+                    <div class="card-body">
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">选择已保存的机器人</label>
+                            <select class="form-select" id="saved-robots" onchange="loadSelectedConfig()">
+                                <option value="" selected>-- 新建/手动输入 --</option>
+                            </select>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label class="form-label">机器人名称 (备注)</label>
+                                <input type="text" class="form-control" id="input-name" placeholder="例如: 树莓派1号">
+                            </div>
+                            <div class="col-md-7">
+                                <label class="form-label">IP 地址</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="input-ip" value="192.168.">
+                                    <button class="btn btn-primary" onclick="connectDevice()">连接检测</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <div>
+                                <button class="btn btn-outline-success btn-sm" onclick="saveConfig()">💾 保存/更新配置</button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="deleteConfig()">🗑️ 删除配置</button>
+                            </div>
+                            <span id="conn-msg" class="text-muted align-self-center small"></span>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 small mb-0">
+                            提示: 连接成功后将自动解锁控制面板。
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-basic" class="content-section d-none">
+                <h3 class="mb-4">基本控制</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-danger w-100 py-3 mb-3 fw-bold" id="btn-chassis" onclick="toggleChassis()">启动底盘</button>
+                        <div class="card bg-dark text-white text-center p-3 mb-3">
+                            <div>键盘控制区域</div>
+                            <h2 class="mt-2">WASD</h2>
+                        </div>
+                        <textarea id="log-box" class="form-control bg-black text-success" rows="5" readonly></textarea>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="border rounded bg-white shadow-sm d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <h1 class="display-1 text-muted" id="hud-gear">N</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="/static/js/main.js"></script>
+</body>
+</html>

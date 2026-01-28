@@ -1,0 +1,5 @@
+
+#sidebar-wrapper { min-height: 100vh; width: 250px; }
+#page-content-wrapper { width: 100%; }
+.list-group-item.active { background-color: #0d6efd !important; border-color: #0d6efd !important; }
+textarea { resize: none; }
